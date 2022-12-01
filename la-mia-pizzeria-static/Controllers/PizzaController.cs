@@ -6,6 +6,11 @@ namespace la_mia_pizzeria_static.Controllers
 {
     public class PizzaController : Controller
     {
+        PizzeriaContext db;
+        public PizzaController() : base()
+        {
+            db = new PizzeriaContext();
+        }
         public IActionResult Index()
         {
             PizzeriaContext db = new PizzeriaContext();
@@ -29,7 +34,15 @@ namespace la_mia_pizzeria_static.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Pizza pizza)
         {
-            return View();
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            db.Pizzas.Add(pizza);
+            db.SaveChanges();
+
+            return RedirectToAction("Index");
+            
         }
 
     }
